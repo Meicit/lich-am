@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch Âm Dương Việt Nam</title>
+    <script src="https://www.informatik.uni-leipzig.de/~duc/amlich/JavaScript/amlich-hnd.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; width: 300px; }
+        h1 { color: #d32f2f; margin-bottom: 0.5rem; }
+        .date-box { margin: 20px 0; padding: 15px; border: 2px solid #eee; border-radius: 10px; }
+        .solar { font-size: 1.2rem; color: #333; font-weight: bold; }
+        .lunar { font-size: 1.5rem; color: #d32f2f; margin-top: 10px; }
+        .info { font-size: 0.9rem; color: #666; margin-top: 5px; }
+        button { background: #d32f2f; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; transition: 0.3s; }
+        button:hover { background: #b71c1c; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Lịch Việt</h1>
+    <div class="date-box">
+        <div class="solar" id="solar-date">---</div>
+        <hr>
+        <div class="lunar" id="lunar-date">---</div>
+        <div class="info" id="lunar-info">---</div>
+    </div>
+    <button onclick="updateCalendar()">Hôm nay</button>
+</div>
+
+<script>
+    function updateCalendar() {
+        const now = new Date();
+        const d = now.getDate();
+        const m = now.getMonth() + 1;
+        const y = now.getFullYear();
+
+        // Hiển thị Dương lịch
+        document.getElementById('solar-date').innerText = `Dương lịch: ${d}/${m}/${y}`;
+
+        // Chuyển đổi sang Âm lịch (sử dụng hàm từ thư viện amlich-hnd.js)
+        // getLunarDate(ngày, tháng, năm, múi giờ) - VN là múi giờ 7
+        const lunar = getLunarDate(d, m, y, 7);
+
+        // Hiển thị Âm lịch
+        document.getElementById('lunar-date').innerText = `${lunar.day}/${lunar.month} ${lunar.leap ? '(Nhuận)' : ''}`;
+        document.getElementById('lunar-info').innerText = `Năm ${getYearCanChi(lunar.year)}`;
+    }
+
+    // Hàm lấy tên năm Can Chi đơn giản
+    function getYearCanChi(year) {
+        const can = ["Canh", "Tân", "Nhâm", "Quý", "Giáp", "Ất", "Bính", "Đinh", "Mậu", "Kỷ"];
+        const chi = ["Thân", "Dậu", "Tuất", "Hợi", "Tý", "Sửu", "Dần", "Mão", "Thìn", "Tỵ", "Ngọ", "Mùi"];
+        return can[year % 10] + " " + chi[year % 12];
+    }
+
+    updateCalendar();
+</script>
+
+</body>
+</html>
